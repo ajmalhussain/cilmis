@@ -1,0 +1,5 @@
+[28-Jan-2018 09:09:17 Asia/Karachi] PHP Fatal error:  Call to a member function fetch_assoc() on boolean in /home/clmispk/public_html/application/mne/load_form3_1.php on line 78
+[29-Jan-2018 14:53:05 Asia/Karachi] PHP Fatal error:  Call to a member function fetch_assoc() on boolean in /home/clmispk/public_html/application/mne/load_form3_1.php on line 78
+[29-Jan-2018 14:54:31 Asia/Karachi] PHP Fatal error:  Call to a member function fetch_assoc() on boolean in /home/clmispk/public_html/application/mne/load_form3_1.php on line 78
+[29-Jan-2018 14:58:29 Asia/Karachi] PHP Fatal error:  Call to a member function fetch_assoc() on boolean in /home/clmispk/public_html/application/mne/load_form3_1.php on line 78
+[29-Jan-2018 15:00:38 Asia/Karachi] PHP Fatal error:  Call to a member function fetch_assoc() on boolean in /home/clmispk/public_html/application/mne/load_form5_1.php on line 74

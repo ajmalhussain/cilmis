@@ -1,0 +1,552 @@
+<?php
+/**
+ * sub_dist_form
+ * @package reports
+ * 
+ * @author     Ajmal Hussain 
+ * @email <ahussain@ghsc-psm.org>
+ * 
+ * @version    2.2
+ * 
+ */
+//Initializing variables
+//
+if (empty($stakeholder))
+    $stakeholder = 1;
+//selMonth
+$selMonth = isset($selMonth) ? $selMonth : '';
+//selYear
+$selYear = isset($selYear) ? $selYear : '';
+//selProv
+
+$selProv = isset($selProv) ? $selProv : '0';
+//districtId
+$districtId = isset($districtId) ? $districtId : '';
+//selItem
+$selItem = isset($selItem) ? $selItem : '';
+//hfTypeId
+$hfTypeId = isset($hfTypeId) ? $hfTypeId : '';
+//fromDate
+$fromDate = isset($fromDate) ? $fromDate : '';
+//toDate
+$toDate = isset($toDate) ? $toDate : '';
+//qtr
+$qtr = '';
+//qtrArr
+$qtrArr = array();
+$show=isset($show)?$show:'';
+$report_display_type=isset($report_display_type)?$report_display_type:'';
+//Populate arrays
+//hfPrograms
+$hfPrograms = array(1, 2, 4, 11);
+//monthArr
+$monthArr = array('afpak_1');
+//yearArr
+$yearArr = array('afpak_1');
+//dateRange
+$dateRange = array();
+//stakeholderArr
+$stakeholderArr = array('afpak_1');
+//provinceArr
+$provinceArr = array('afpak_1');
+//districtArr
+$districtArr = array('afpak_1');
+$warehouseArr = array('afpak_2');
+//hfTypeArr
+$hfTypeArr = array();
+//producteArr
+$producteArr = array();
+//satelliteArr
+$satelliteArr = array();
+//stakeholderArr
+$sectorArr = array();
+//Checking year_sel
+//echo $show;exit;
+$check_box=array();
+$summary_or_detail=array();
+
+if (!isset($_POST['year_sel'])) {
+    //Checking date
+    if (date('d') > 10) {
+        //selMonth
+        $selMonth = date('m', strtotime("-1 month", strtotime(date('Y-m'))));
+        //selYear
+        $selYear = date('Y', strtotime("-1 month", strtotime(date('Y-m'))));
+    } else {
+        //selMonth
+        $selMonth = date('m', strtotime("-2 month", strtotime(date('Y-m'))));
+        //selYear
+        $selYear = date('Y', strtotime("-2 month", strtotime(date('Y-m'))));
+    }
+}
+?>
+<form name="frm" id="frm" action="" method="post" role="form">
+    <div class="row">               
+        <div class="col-md-12"> 
+            <?php
+            if (in_array($rptId, $monthArr)) {
+                ?>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="control-label">Month</label>
+                        <div class="form-group">
+                            <select name="month_sel" id="month_sel" class="form-control input-sm" required>
+                                <?php
+                                for ($i = 1; $i <= 12; $i++) {
+                                    if ($selMonth == $i) {
+                                        $sel = "selected='selected'";
+                                    } else {
+                                        $sel = "";
+                                    }
+                                    ?>
+                                    <option value="<?php echo date('m', mktime(0, 0, 0, $i, 1)); ?>"<?php echo $sel; ?> ><?php echo date('F', mktime(0, 0, 0, $i, 1)); ?></option>
+                                    <?php
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <?php
+            }
+            ?>
+            <?php
+            if (in_array($rptId, $yearArr)) {
+                ?>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="control-label">Year</label>
+                        <div class="form-group">
+                            <select name="year_sel" id="year_sel" class="form-control input-sm" required>
+                                <?php
+                                for ($j = date('Y'); $j >= 2010; $j--) {
+                                    if ($selYear == $j) {
+                                        $sel = "selected='selected'";
+                                    } else {
+                                        $sel = "";
+                                    }
+                                    ?>
+                                    <option value="<?php echo $j; ?>" <?php echo $sel; ?> ><?php echo $j; ?></option>
+                                    <?php
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <?php
+            } else if (in_array($rptId, $dateRange)) {
+                ?>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="control-label">Start Date</label>
+                        <div class="form-group">
+                            <input type="text" name="from_date" id="from_date" readonly="readonly" class="form-control input-sm" value="<?php echo $fromDate; ?>" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="control-label">End Date</label>
+                        <div class="form-group">
+                            <input type="text" name="to_date" id="to_date" readonly="readonly" class="form-control input-sm" value="<?php echo $toDate; ?>" required>
+                        </div>
+                    </div>
+                </div>
+                <?php
+            }
+            ?>
+            <?php
+            if (in_array($rptId, $qtrArr)) {
+                ?>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="control-label">Quarter</label>
+                        <div class="form-group">
+                            <select name="qtr" id="qtr" class="form-control input-sm" required>
+                                <option value="1" <?php echo ($qtr == 1) ? 'selected="selected"' : ''; ?>>1st Quarter</option>
+                                <option value="2" <?php echo ($qtr == 2) ? 'selected="selected"' : ''; ?>>2nd Quarter</option>
+                                <option value="3" <?php echo ($qtr == 3) ? 'selected="selected"' : ''; ?>>3rd Quarter</option>
+                                <option value="4" <?php echo ($qtr == 4) ? 'selected="selected"' : ''; ?>>4th Quarter</option>
+                                <option value="5" <?php echo ($qtr == 5) ? 'selected="selected"' : ''; ?>>1st Half</option>
+                                <option value="6" <?php echo ($qtr == 6) ? 'selected="selected"' : ''; ?>>2nd Half</option>
+                                <option value="7" <?php echo ($qtr == 7) ? 'selected="selected"' : ''; ?>>Annual</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <?php
+            }
+            ?>
+            <?php
+            if (in_array($rptId, $stakeholderArr)) {
+                ?>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="control-label">Stakeholder</label>
+                        <div class="form-group">
+                            <select name="stakeholder" id="stakeholder" required class="form-control input-sm">
+                                <option value="">Select</option>
+                                <?php
+                                $stk_rp_arr = array('clr11', 'clr13', 'outletCYP', 'distCYP');
+
+                                $where = '';
+                                if (in_array($rptId, $stk_rp_arr))
+                                    $where .= ' AND stakeholder.stkid in (1,2,7,9,73) ';
+
+                                $querys = "SELECT
+                        stakeholder.stkid,
+                        stakeholder.stkname
+                        FROM
+                        stakeholder
+                        WHERE
+                        stakeholder.ParentID IS NULL
+                        AND stakeholder.stk_type_id IN (0, 1) AND
+                        stakeholder.is_reporting = 1
+                        AND stakeholder.lvl = 1
+                        $where
+                        ORDER BY
+                        stakeholder.stkorder ASC";
+                                //query result
+                                $rsprov = mysql_query($querys) or die();
+                                $stk_name = '';
+                                while ($rowp = mysql_fetch_array($rsprov)) {
+                                    if ($stakeholder == $rowp['stkid']) {
+                                        $sel = "selected='selected'";
+                                        $stk_name = $rowp['stkname'];
+                                    } else {
+                                        $sel = "";
+                                    }
+                                    //Populate prov_sel combo
+                                    ?>
+                                    <option value="<?php echo $rowp['stkid']; ?>" <?php echo $sel; ?>><?php echo $rowp['stkname']; ?></option>
+                                    <?php
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+    <?php
+}
+?>
+
+
+
+<?php
+if (in_array($rptId, $provinceArr)) {
+    ?>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="control-label">Province</label>
+                        <div class="form-group">
+                            <select name="prov_sel" id="prov_sel" required class="form-control input-sm">
+                                <option value="">Select</option>
+    <?php
+    
+//        $sel = ($selProv == 3) ? 'selected="selected"' : '';
+//        echo "<option value=\"2\" >Sindh</option>";
+//        echo "<option value=\"3\" $sel>Khyber Pakhtunkhwa</option>";
+     
+        $queryprov = "SELECT
+distinct tbl_locations.PkLocID as prov_id,
+tbl_locations.LocName as prov_title
+FROM
+tbl_locations
+INNER JOIN tbl_locations AS t ON t.ParentID = tbl_locations.PkLocID
+INNER JOIN project_locations ON t.PkLocID = project_locations.location_id
+WHERE
+tbl_locations.LocLvl = 2 AND
+tbl_locations.ParentID IS NOT NULL AND
+project_locations.project = 'afpak'
+";
+        //query result
+        $rsprov = mysql_query($queryprov) or die();
+        $prov_name = '';
+        while ($rowprov = mysql_fetch_array($rsprov)) {
+            if ($rptId == 'satellite') {
+                if($rowprov['prov_id'] != 3 && $rowprov['prov_id'] != 2) continue;
+            }
+            if ($selProv == $rowprov['prov_id']) {
+                $sel = "selected='selected'";
+                $prov_name = $rowprov['prov_title'];
+            } else {
+                $sel = "";
+            }
+            //Populate prov_sel combo
+            ?>
+                                        <option value="<?php echo $rowprov['prov_id']; ?>" <?php echo $sel; ?>><?php echo $rowprov['prov_title']; ?></option>
+                                        <?php
+                                    }
+ 
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+    <?php
+}
+?>
+            <?php
+            if (in_array($rptId, $districtArr)) {
+                ?>
+                <div class="col-md-2">
+                    <div class="form-group" id="districtDiv">
+                        <label class="control-label">District</label>
+                        <div class="form-group">
+                            <select name="district" id="district" class="form-control input-sm">
+                                <option value="">All</option>
+
+                            </select>
+                        </div>
+                    </div>
+                </div>
+    <?php
+} if (in_array($rptId, $warehouseArr)) {
+                ?>
+                <div class="col-md-3">
+                    <div class="form-group" id="wh_div">
+                        <label class="control-label">Warehouse / Store</label>
+                        <div class="form-group">
+                            <select name="warehouse" id="warehouse" class="form-control input-sm">
+                                <option value="">--Select--</option>
+                                <?php
+                                   $queryItem = "SELECT
+                                    tbl_warehouse.wh_name,
+                                    tbl_warehouse.wh_id
+                                    FROM
+                                    tbl_warehouse
+                                    INNER JOIN project_locations ON tbl_warehouse.dist_id = project_locations.location_id
+                                    WHERE
+                                    tbl_warehouse.is_allowed_im = 1 AND 
+                                    tbl_warehouse.stkid = 7 AND
+                                    project_locations.project = 'afpak'
+                                    ORDER by wh_name
+                            ";
+                                //Result
+                                $rsprov = mysql_query($queryItem) or die();
+                                while ($rowItem = mysql_fetch_array($rsprov)) {
+                                    if ($selwh == $rowItem['wh_id']) {
+                                        $sel = "selected='selected'";
+                                    } else {
+                                        $sel = "";
+                                    }
+                                    ?>
+                                    <?php //Populate itm_id combo ?>
+                                    <option value="<?php echo $rowItem['wh_id']; ?>" <?php echo $sel; ?>><?php echo $rowItem['wh_name']; ?></option>
+                                    <?php
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+    <?php
+}
+?>
+            <?php
+            if (in_array($rptId, $producteArr)) {
+                ?>
+                <div class="col-md-2">
+                    <div class="form-group" id="districtDiv">
+                        <label class="control-label">Product</label>
+                        <div class="form-group">
+                            <select name="itm_id" id="itm_id" class="form-control input-sm" required>
+                                <option value="">Select</option>
+    <?php
+    //Query for item
+    //gets 
+    //itm_name
+    //itm_id
+    $queryItem = "SELECT
+                                        itminfo_tab.itm_name,
+                                        itminfo_tab.itm_id
+                                    FROM
+                                        stakeholder_item
+                                        INNER JOIN itminfo_tab ON stakeholder_item.stk_item = itminfo_tab.itm_id
+                                    WHERE
+                                        stakeholder_item.stkid = 1
+                                        AND itminfo_tab.itm_category = 1
+                                    ORDER BY
+                                        itminfo_tab.frmindex ASC";
+    //Result
+    $rsprov = mysql_query($queryItem) or die();
+    while ($rowItem = mysql_fetch_array($rsprov)) {
+        if ($selItem == $rowItem['itm_id']) {
+            $sel = "selected='selected'";
+        } else {
+            $sel = "";
+        }
+        ?>
+                                    <?php //Populate itm_id combo ?>
+                                    <option value="<?php echo $rowItem['itm_id']; ?>" <?php echo $sel; ?>><?php echo $rowItem['itm_name']; ?></option>
+                                    <?php
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+    <?php
+}
+?>
+            <?php
+            if (in_array($rptId, $sectorArr)) {
+                ?>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="control-label">Sector</label>
+                        <div class="form-group">
+                            <select name="sector" id="sector" required class="form-control input-sm">
+
+    <?php
+    $querys = "SELECT
+                        * from stakeholder_type order by stk_type_id";
+    //query result
+    $rsprov = mysql_query($querys) or die();
+    $sector_name = '';
+    while ($rowp = mysql_fetch_array($rsprov)) {
+        if ($sectorId == $rowp['stk_type_id']) {
+            $sel = "selected='selected'";
+            $sector_name = $rowp['stk_type_descr'];
+        } else {
+            $sel = "";
+        }
+        //Populate prov_sel combo
+        ?>
+                                    <option value="<?php echo $rowp['stk_type_id']; ?>" <?php echo $sel; ?>><?php echo $rowp['stk_type_descr']; ?></option>
+                                    <?php
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                                <?php
+                            }
+                            ?>
+<?php
+if (in_array($rptId, $hfTypeArr)) {
+    ?>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="control-label">Health Facility Type</label>
+                        <div class="form-group">
+                <?php
+                if ($rptId == 'sdp_p') {
+                    echo '<select name="hf_type_sel[]" size="6" multiple id="hf_type_sel"  required class="form-control input-sm">';
+                } else {
+                    echo '<select name="hf_type_sel" id="hf_type_sel"  required class="form-control input-sm">';
+                }
+                ?>
+                            <option value="">Select</option>
+
+                            <?php if ($rptId == 'spr10') { ?> <option value="0">All</option><?php
+                            }
+                            //Query for prov
+                            //gets
+                            //tbl_hf_type.pk_id,
+                            //tbl_hf_type.hf_type
+                            $queryprov = "SELECT
+                            tbl_hf_type.pk_id,
+                            tbl_hf_type.hf_type
+                        FROM
+                            tbl_hf_type
+                        INNER JOIN tbl_hf_type_rank ON tbl_hf_type.pk_id = tbl_hf_type_rank.hf_type_id
+                        WHERE
+                            tbl_hf_type_rank.stakeholder_id = $stakeholder
+                        AND tbl_hf_type_rank.province_id = $selProv
+                        ORDER BY
+                            tbl_hf_type_rank.hf_type_rank ASC";
+//    echo $queryprov;
+                            $rsprov = mysql_query($queryprov) or die();
+                            if (isset($_REQUEST['hf_type_sel'])) {
+                                if ($rptId != 'sdp_p')
+                                    echo "<option value='0'" . (($hfTypeId == 0) ? 'selected=\"selected\"' : '' ) . ">All</option>";
+                            }
+                            while ($rowHFType = mysql_fetch_array($rsprov)) {
+                                //Checking hfTypeId
+                                $sel = "";
+                                if ($rptId == 'sdp_p') {
+                                    if (in_array($rowHFType['pk_id'], $hfTypeId)) {
+                                        $sel = "selected='selected'";
+                                        $hf_list[] = $rowHFType['hf_type'];
+                                    }
+                                } else {
+                                    if ($hfTypeId == $rowHFType['pk_id']) {
+                                        $sel = "selected='selected'";
+                                    }
+                                }
+                                ?>
+                                <?php //Populate hf_type_sel combo?>
+                                <option value="<?php echo $rowHFType['pk_id']; ?>" <?php echo $sel; ?>><?php echo $rowHFType['hf_type']; ?></option>
+                                <?php
+                            }
+                            ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                            <?php
+                        }
+                        ?>
+                        <?php
+                        if (in_array($rptId, $satelliteArr)) {
+                            ?>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="control-label">Satellite Camp</label>
+                        <div class="form-group">
+                            <select name="camps" id="camps" class="form-control input-sm">
+                                <option value="">Select</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <?php
+            }
+            ?>
+                <?php
+            if (in_array($rptId, $check_box)) {
+                ?>
+                <div class="col-md-2">
+                    <div class="form-group" id="checkboxDiv">
+                        <br><br>
+                        <div class="form-group">
+                            <input name="show_all" id="show_all" type="checkbox" <?php  if($show=="on") {echo 'checked';} else{ echo "";}?>> Show All 
+
+                             
+                        </div>
+                    </div>
+                </div>
+                <?php
+            }
+            ?>
+                <?php
+            if (in_array($rptId, $summary_or_detail)) {
+                ?>
+                <div class="col-md-2">
+                    <div class="form-group" id="checkboxDiv">
+                        <label class="control-label">Report Type</label>
+                        <div class="form-group">
+                            <select name="summary_or_detail" id="summary_or_detail" class="form-control input-sm">
+                                <option value="summary" <?=($report_display_type=='summary')?'selected':''?>>Summary</option>
+                                <option value="detail"  <?=($report_display_type=='detail')?'selected':''?>>Detail</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <?php
+            }
+            ?>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="control-label">&nbsp;</label>
+                    <div class="form-group">
+                        <button type="submit" name="submit" class="btn btn-primary input-sm">Go</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

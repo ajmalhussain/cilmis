@@ -1,0 +1,4 @@
+[20-Oct-2017 10:17:47 Asia/Karachi] PHP Warning:  include(/home/clmispk/public_html/clmisapp/application/includes/classes/db.php): failed to open stream: No such file or directory in /home/clmispk/public_html/application/api/fp-clmis.php on line 17
+[20-Oct-2017 10:17:47 Asia/Karachi] PHP Warning:  include(): Failed opening '/home/clmispk/public_html/clmisapp/application/includes/classes/db.php' for inclusion (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/clmispk/public_html/application/api/fp-clmis.php on line 17
+[20-Oct-2017 10:17:47 Asia/Karachi] PHP Warning:  mysql_real_escape_string(): Access denied for user ''@'localhost' (using password: NO) in /home/clmispk/public_html/application/api/fp-clmis.php on line 21
+[20-Oct-2017 10:17:47 Asia/Karachi] PHP Warning:  mysql_real_escape_string(): A link to the server could not be established in /home/clmispk/public_html/application/api/fp-clmis.php on line 21

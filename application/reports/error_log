@@ -1,0 +1,7 @@
+[09-Jan-2018 12:41:43 Asia/Karachi] PHP Warning:  phpinfo() has been disabled for security reasons in /home/clmispk/public_html/application/reports/avg_stock_out_rate.php on line 2
+[09-Jan-2018 13:01:49 Asia/Karachi] PHP Warning:  phpinfo() has been disabled for security reasons in /home/clmispk/public_html/application/reports/avg_stock_out_rate.php on line 2
+[09-Jan-2018 13:02:10 Asia/Karachi] PHP Warning:  phpinfo() has been disabled for security reasons in /home/clmispk/public_html/application/reports/avg_stock_out_rate.php on line 2
+[09-Jan-2018 13:07:04 Asia/Karachi] PHP Warning:  phpinfo() has been disabled for security reasons in /home/clmispk/public_html/application/reports/avg_stock_out_rate.php on line 2
+[09-Jan-2018 15:33:17 Asia/Karachi] PHP Warning:  phpinfo() has been disabled for security reasons in /home/clmispk/public_html/application/reports/avg_stock_out_rate.php on line 2
+[17-Jan-2018 09:22:21 Asia/Karachi] PHP Warning:  file_get_contents(): http:// wrapper is disabled in the server configuration by allow_url_fopen=0 in /home/clmispk/public_html/application/reports/ip_info.php on line 16
+[17-Jan-2018 09:22:21 Asia/Karachi] PHP Warning:  file_get_contents(http://www.geoplugin.net/php.gp?ip=): failed to open stream: no suitable wrapper could be found in /home/clmispk/public_html/application/reports/ip_info.php on line 16
